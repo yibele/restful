@@ -1,47 +1,60 @@
 <?php
+use Phalcon\Mvc\Micro;
+use Phalcon\Loader;
 use Phalcon\Di\FactoryDefault;
+use Phalcon\Db\Adapter\Pdo\Mysql;
 
-error_reporting(E_ALL);
 
-define('BASE_PATH', dirname(__DIR__));
-define('APP_PATH', BASE_PATH . '/app');
 
-try {
+/**
+ * Created by PhpStorm.
+ * User: yibeel
+ * Date: 17/6/14
+ * Time: 下午4:12
+ */
 
-    /**
-     * The FactoryDefault Dependency Injector automatically registers
-     * the services that provide a full stack framework.
-     */
-    $di = new FactoryDefault();
 
-    /**
-     * Handle routes
-     */
-    include APP_PATH . '/config/router.php';
+$loader = new Loader();
+$loader->registerDirs ([
+    '../Controllers',
+    '../Models',
+    '../Router'
 
-    /**
-     * Read services
-     */
-    include APP_PATH . '/config/services.php';
+]);
+$loader->register();
+$di = new FactoryDefault();
+$di->setShared(
+    "db",
+    function () {
+        return new Mysql([
+            "host" => '127.0.0.1',
+            'dbname' => 'xyp',
+            'prot' => '3306',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8'
+        ]);
+    }
+);
 
-    /**
-     * Get config service for use in inline setup below
-     */
-    $config = $di->getConfig();
+$activity = new activity();
 
-    /**
-     * Include Autoloader
-     */
-    include APP_PATH . '/config/loader.php';
+$app = new Micro();
 
-    /**
-     * Handle the request
-     */
-    $application = new \Phalcon\Mvc\Application($di);
+//注册路由以及验证
+$router = new router();
+$router->setApp($app);
 
-    echo str_replace(["\n","\r","\t"], '', $application->handle()->getContent());
+$router->init();
 
-} catch (\Exception $e) {
-    echo $e->getMessage() . '<br>';
-    echo '<pre>' . $e->getTraceAsString() . '</pre>';
-}
+
+
+
+
+
+
+
+
+
+
+
