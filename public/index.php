@@ -26,17 +26,18 @@ $loader->registerNameSpaces([
     'App\\Models' => '../Models',
 ]);
 
+require ('./config.php');
 $loader->register();
 $di = new FactoryDefault();
 $di->setShared(
     "db",
-    function () {
+    function () use ($db) {
         return new Mysql([
-            "host" => '127.0.0.1',
-            'dbname' => 'phalcon',
+            "host" => $db['host'],
+            'dbname' => $db['dbname'],
             'prot' => '3306',
-            'username' => 'root',
-            'password' => 'wo19540424',
+            'username' => $db['username'],
+            'password' => $db['password'],
             'charset' => 'utf8'
         ]);
     }

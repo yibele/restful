@@ -60,7 +60,14 @@ class activity extends Controller
      */
 
     public function delete($id) {
-        echo "delete".$id;
+        $act = new App\Models\Activity();
+        $act = $act->findFirst("id = $id");
+        
+        if($act->delete()) {
+            $this->sendJson('OK', 200 , "delete OK");
+        } else {
+            $this->sendJson('Fail',407, 'delete Not OK');
+        }
     }
 
     /**
