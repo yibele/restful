@@ -21,6 +21,11 @@ $loader->registerDirs ([
     '../Router'
 
 ]);
+
+$loader->registerNameSpaces([
+    'App\\Models' => '../Models',
+]);
+
 $loader->register();
 $di = new FactoryDefault();
 $di->setShared(
@@ -28,10 +33,10 @@ $di->setShared(
     function () {
         return new Mysql([
             "host" => '127.0.0.1',
-            'dbname' => 'xyp',
+            'dbname' => 'phalcon',
             'prot' => '3306',
             'username' => 'root',
-            'password' => '',
+            'password' => 'wo19540424',
             'charset' => 'utf8'
         ]);
     }
@@ -39,7 +44,7 @@ $di->setShared(
 
 $activity = new activity();
 
-$app = new Micro();
+$app = new Micro($di);
 
 //注册路由以及验证
 $router = new router();
