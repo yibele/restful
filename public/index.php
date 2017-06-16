@@ -43,7 +43,6 @@ $di->setShared(
     }
 );
 
-$activity = new activity();
 
 $app = new Micro($di);
 

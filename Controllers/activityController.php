@@ -7,7 +7,7 @@
  * Time: 下午4:18
  */
 use Phalcon\Mvc\Controller;
-class activity extends Controller
+class activityController extends Controller
 {
     
     public function index () {
@@ -99,6 +99,20 @@ class activity extends Controller
                 exit("Mysql Query Error : Unkown column '$k' in fileds list");
             }
         }
+    }
+
+    /**
+     * 添加热门活动
+     */
+    public function addHot(){
+        $sql = '';
+        $arr = $this->request->getPost();
+        foreach($arr as $k=>$v) {
+            $sql.= "$k='".$v."',";
+        }
+        $sql = substr($sql,0,-1);
+        $sql = "INSERT INTO hot_act SET ".$sql;
+        $this->db->query($sql);
     }
 }
 

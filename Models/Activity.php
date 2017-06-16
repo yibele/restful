@@ -36,6 +36,13 @@ class Activity extends model
     public function initialize() {
         //默认情况下table名就是class那么， 如果需要自己设定，就得调用setSource 方法
         $this->setSource('activity');
+        $this->hasManyToMany(
+            'id',
+            'actUser',
+            'act_id','user_id',
+            'App\\Models\\User',
+            "id"
+        );
     }
 
     //每次被创建的时候都会被启用

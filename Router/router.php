@@ -77,50 +77,102 @@ class router extends Controller
             $this->response->send();
             exit;
         });
-        for ($i = 0; $i < count($this->_allowResource); $i++) {
-            $getUrl = "/api/" . $this->_allowResource[$i];
-            $showUrl = "/api/" . $this->_allowResource[$i] . "/{id:[0-9]+}";
-            $controller = new $this->_allowResource[$i];
-            $this->_app->get(
-                $getUrl,
-                [
-                    $controller,
-                    'index'
-                ]
-            );
-            $this->_app->get(
-                $showUrl,
-                [
-                    $controller,
-                    'show'
-                ]
-            );
-            $this->_app->post(
-                $getUrl,
-                [
-                    $controller,
-                    'add'
-                ]
-            );
-            $this->_app->put(
-                $showUrl,
-                [
-                    $controller,
-                    'update'
-                ]
-            );
-            $this->_app->delete(
-                $showUrl,
-                [
-                    $controller,
-                    'delete'
-                ]
-            );
-        }
+
+        $act = new activityController();
+        $user = new userController();
+
+        $this->_app->post(
+            '/api/activity/addHot',
+            [
+                $act,
+                'addHot'
+            ]
+        );
+
+        $this->_app->get(
+            '/api/user/onLogin',
+            [
+                $user,
+                'onLogin'
+            ]
+        );
+
+        $this->_app->get(
+            '/api/activity',
+            [
+                $act,
+                'index'
+            ]
+        );
+
+        $this->_app->get(
+            '/api/activity/{id:[0-9]+}',
+            [
+                $act,
+                'show'
+            ]
+        );
+
+        $this->_app->post(
+            '/api/activity',
+            [
+                $act,
+                'add'
+            ]
+        );
+
+        $this->_app->put(
+            '/api/activity/{id:[0-9]+}',
+            [
+                $act,
+                'update'
+            ]
+        );
+
+        $this->_app->delete(
+            '/api/activity/{id:[0-9]+}',
+            [
+                $act,
+                'delete'
+            ]
+        );
+
+        $this->_app->post(
+            '/api/user',
+            [
+                $user,
+                'add'
+            ]
+        );
+
+        $this->_app->put(
+            '/api/user/{id:[0-9]+}',
+            [
+                $user,
+                'update'
+            ]
+        );
+
+        $this->_app->get(
+            '/api/user/{id:[0-9]+}',
+            [
+                $user,
+                'show'
+            ]
+        );
+
+        $this->_app->get(
+            '/api/user',
+            [
+                $user,
+                'index'
+            ]
+        );
     }
 
     private function _render()
     {
+
         $this->_app->handle();
     }
 
