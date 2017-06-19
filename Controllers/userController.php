@@ -23,9 +23,21 @@ class userController extends Controller
         $sql = "SELECT * FROM user WHERE id=$id";
         $res = $this->db->fetchOne($sql);
         if($res){
-            $this->sendJson($res);
+            $this->sendJson($res,200,"OK");
         } else {
             $this->sendJson($res,406,"No Data Here");
+        }
+    }
+
+    /**
+     * 通过用户名查找用户
+     */
+    public function findByNickName($nickName) {
+        $user = User::findFirst("nickName='$nickName'");
+        if($user) {
+            $this->sendJson($user,200,'OK');
+        } else {
+            $this->sendJson('false' , 405,'Cant Find User');
         }
     }
 
@@ -37,7 +49,7 @@ class userController extends Controller
         $arr = $this->request->getPost();
         $user = new App\Models\User();
         if($user->create($arr)){
-            $this->response->setContent("100010");
+            $this->response->setContent("$user->id");
         } else {
             $this->response->setStatusCode(406,'20010');
             $this->response->setContent("200010");
@@ -84,4 +96,43 @@ class userController extends Controller
         ]);
         $this->response->send();
     }
+
+    /**
+     * 给用户添加活动
+     */
+    public function userAddAct () {
+        $nickName = $this->request->get('nickName');
+        $actid = $this->request->get("actid");
+        $actUser = new \App\Models\actUser();
+        $actUser->nickName = $nickName;
+        $actUser->act_id = $actid;
+        $actUser->save();
+    }
+
+    /**
+     * 通过用户名
+     * 获取用户参加的活动
+     */
+    public function userActs ($nickName) {
+        $sql = "SELECT `act_id`,`act_title`,`act_enough_user`,`act_img`,`act_user_need` from activity as a LEFT JOIN act_user as au ON au.act_id = a.id LEFT JOIN user AS u ON u.nickName = au.nickName WHERE u.nickName='$nickName'";
+        $res = $this->db->fetchAll($sql);
+        $this->sendJson($res,200,'OK');
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

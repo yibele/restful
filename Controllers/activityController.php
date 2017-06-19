@@ -114,6 +114,28 @@ class activityController extends Controller
         $sql = "INSERT INTO hot_act SET ".$sql;
         $this->db->query($sql);
     }
+
+    /**
+     * 获取热门，即将完成和最新排队
+     */
+    public function getActIndex() {
+        $sql = "SELECT * FROM hot_act h,activity a WHERE h.act_id = a.id";
+        $hotAct = $this->db->fetchAll($sql);
+        $sql = "SELECT * FROM activity WHERE act_have_done = 0 ORDER BY act_enough_user DESC ";
+        $res = $this->db->fetchAll($sql);
+        $soonAct = array_slice($res,0,3);
+        foreach($res as $k=>$v) {
+            $created_at[$k] = $v['created_at'];
+        }
+        array_multisort($created_at,SORT_DESC,$res);
+        $newAct = array_slice($res,0,3);
+        $actInfo = array();
+        $actInfo['hotAct'] = $hotAct;
+        $actInfo['soonAct'] = $soonAct;
+        $actInfo['newAct'] = $newAct;
+        $this->sendJson($actInfo,200,"OK");
+        //$this->sendJson($,200,"OK");
+    }
 }
 
 

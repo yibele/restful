@@ -168,6 +168,49 @@ class router extends Controller
                 'index'
             ]
         );
+
+        /**
+         * 获取首页热门，即将完成的活动
+         */
+        $this->_app->get(
+            '/api/activity/getActIndex',
+            [
+                $act,
+                'getActIndex'
+            ]
+        );
+
+        /**
+         * 通过用户nickName进行查找，查看用户是否存在于数据库中
+         */
+        $this->_app->get(
+            '/api/user/search/{nickName}',
+            [
+                $user,
+                'findByNickName'
+            ]
+        );
+        /**
+         * 给用户添加活动
+         */
+        $this->_app->get(
+            '/api/user/userAddAct',
+            [
+                $user,
+                'userAddAct'
+            ]
+        );
+
+        /**
+         * 通过用户名获取用户参加的活动
+         */
+        $this->_app->get(
+            '/api/user/userActs/{nickName}',
+            [
+                $user,
+                'userActs'
+            ]
+        );
     }
 
     private function _render()

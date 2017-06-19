@@ -13,19 +13,10 @@ class actUser extends Model
 {
     public $id;
 
-    public $created_at;
+    public $act_id;
 
-    public function initialize() {
-        $this->belongsTo(
-            'act_id',
-            'App\\Models\\Activity',
-            'id'
-        );
-        $this->belongsTo(
-            'user_id',
-            'App\\Models\\User',
-            'id'
-        );
-    }
+    public $nickName;
+
+    public $created_at;
 
 }

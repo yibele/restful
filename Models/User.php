@@ -12,6 +12,24 @@ use Phalcon\Mvc\Model;
 
 class User extends Model
 {
+    public $openId;
+
+    public $nickName;
+
+    public $phone;
+
+    public $type;
+
+    public $login_time;
+
+    public $gender;
+
+    public $avatarUrl;
+
+    public $city;
+
+    public $country;
+
     public function validation () {
         $validator = new Validation();
 
@@ -23,13 +41,16 @@ class User extends Model
                 ]
             )
         );
+
+        $validator->add(
+            'nickName',
+            new Uniqueness(
+                [
+                    'message' => 'the nickName must be unique',
+                ]
+            )
+        );
         return $this->validate($validator);
     }
-
-    public $userInfo;
-
-    public $openId;
-
-
 
 }
